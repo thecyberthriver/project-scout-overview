@@ -4,6 +4,16 @@ A record, for my own reference, of what Project Scout is and what I built. The s
 machine account: **https://github.com/tldpprojectscout/project-scout** (transferred there from this account so the bot
 owns its own repository and low-privilege token). This repo is documentation only.
 
+## Documents in this repo
+
+- **[SECURITY_FEATURES.md](SECURITY_FEATURES.md)** — the complete catalog of every security control I built: the
+  publishing gate, isolated four-engine scanning, link screening with SSRF guards, commit integrity, snapshot
+  validation, the safe-delivery Workers, least-privilege CI, sandboxes, identity/privacy, Discord server security,
+  the four high-priority review findings, verification, and honest limits.
+- **[DISCORD_SERVER.md](DISCORD_SERVER.md)** — how I created the private TLDP Discord server, step by step, with
+  screenshots of the live server.
+- This README — the overall project record and architecture.
+
 ## What it is
 
 Project Scout is a bot system that finds GitHub project ideas, open-source contribution opportunities and research code
