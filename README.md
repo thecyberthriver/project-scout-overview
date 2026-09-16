@@ -82,3 +82,7 @@ The student sandbox is what makes the residual risk acceptable.
 - **Code:** https://github.com/tldpprojectscout/project-scout (the bot's machine account).
 - **Case-study library:** https://github.com/tldpprojectscout/tldp-case-studies.
 - **This repo:** a documentation record kept under my personal account.
+
+## The Discord server
+
+See **[DISCORD_SERVER.md](DISCORD_SERVER.md)** for a documented walkthrough (with screenshots) of the private TLDP Discord server I designed and built from code.
