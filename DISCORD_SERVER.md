@@ -10,6 +10,38 @@ A gated, single-purpose community server that turns a stream of automatically-sc
 structured learning program: per-major project feeds, a "set up your sandbox first" onboarding, interview practice,
 spring requirements (a hackathon and a capstone), and a case-study library.
 
+## How I built it, step by step
+
+I built the server as **infrastructure-as-code** rather than clicking it together, so it's reproducible and
+version-controlled. The provisioning logic lives in `discord_setup.py` in the project repo.
+
+1. **Created the Discord application and bot** in the Discord Developer Portal, and created the server
+   `TLDP_2026_2027`. Set the server verification level to Medium (verified email required before posting) and removed
+   the "Create Invite" permission from `@everyone` so only staff can invite.
+2. **Designed the role model** with least privilege: `TLDP Staff` (admin), `TLDP Student` (the gate that unlocks the
+   learning content), and one mentionable role per major (Cybersecurity, SWE, Quant, and so on). The automation bot's
+   role sits below staff.
+3. **Designed the category and channel layout in code** as a single data structure: which categories are gated, and
+   which channels are text vs. forum. This made the whole server a diff I could review, not a series of clicks.
+4. **Provisioned everything in one idempotent run** of `discord_setup.py`, which creates the categories, channels,
+   permission overwrites, and webhooks, and can be re-run safely to apply changes.
+5. **Gated the content** with permission overwrites so that every learning category is hidden until a member holds the
+   `TLDP Student` role; only the START HERE category is visible to newcomers.
+6. **Created a webhook per feed channel** so the automated bot can post screened repositories into the right major's
+   forum, and stored those webhook URLs as a secret for the GitHub Actions job.
+7. **Seeded the content** the script posts automatically: the pinned welcome and rules, the sandbox lessons, the
+   interview-practice rubrics and worked examples, and the GitHub Academy lessons.
+8. **Ordered onboarding so safety comes first** — I placed the "SET UP YOUR SANDBOX (do this first)" category directly
+   after START HERE, so a student's first action is building a safe place to run code.
+9. **Set up enrollment** (`enroll.py`): the staff roster becomes a distribution list of unique, single-use, expiring
+   invites, and staff grant the Student role to members who join. Access is controlled by the roster, not by anyone
+   typing a name.
+10. **Added the staff administrators** and wired the automation: a GitHub Actions job posts the screened feed through
+    the channel webhooks, and a Cloudflare Worker answers the `/scout` and `/verify` slash commands.
+
+Re-running is a single command (`python discord_setup.py`), which is what makes this reproducible: the entire server
+can be rebuilt or updated from code.
+
 ## Channel architecture
 
 I organized the server into purpose-built categories, each gated so only verified students see the learning content.
